@@ -1,0 +1,143 @@
+:root {
+  --green: #2a9d8f;
+  --blue: #264653;
+  --red: #e76f51;
+  --gray: #eee;
+  --dark-gray: #888;
+}
+html {
+  font-family: "MuseoModerno", cursive;
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-top: 0;
+  margin-bottom: 1.45rem;
+}
+button,
+input {
+  font-family: inherit;
+  font-size: 1rem;
+}
+input {
+  border: none;
+  border-radius: 4px;
+  display: block;
+}
+label {
+  display: block;
+}
+button {
+  border: none;
+  border-radius: 4px;
+  background-color: var(--red);
+  color: white;
+  display: block;
+  cursor: pointer;
+
+  &.round {
+    $dimensions: 30px;
+    width: $dimensions;
+    height: $dimensions;
+    border-radius: 50%;
+  }
+
+  &:disabled {
+    background-color: var(--dark-gray);
+  }
+}
+
+main {
+  display: flex;
+
+  aside {
+    flex: 1;
+    background-color: var(--green);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    .reset-btn {
+      margin: auto 0 20px;
+    }
+  }
+  section {
+    flex: 3;
+    background-color: var(--blue);
+    color: white;
+    padding: 0 20px 20px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.card {
+  background-color: white;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.03) 0px 3px 2px, rgba(0, 0, 0, 0.05) 0px 7px 5px,
+    rgba(0, 0, 0, 0.06) 0px 13px 10px, rgba(0, 0, 0, 0.07) 0px 22px 18px,
+    rgba(0, 0, 0, 0.09) 0px 42px 33px, rgba(0, 0, 0, 0.12) 0px 100px 80px;
+  padding: 20px;
+  border-radius: 4px;
+
+  input {
+    background-color: var(--gray);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      background-color: var(--green);
+    }
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.installment-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.45rem;
+
+  p {
+    margin: 0;
+  }
+
+  button {
+    margin-left: 10px;
+  }
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}

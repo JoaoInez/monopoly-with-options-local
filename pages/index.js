@@ -1,209 +1,131 @@
-import Head from 'next/head'
+import React, { useState } from "react";
+import Head from "next/head";
+import PlayerCard from "../components/player-card";
+
+const PLAYER = {
+  savings: 0,
+  loan: 0,
+  installment: 0,
+  globalLap: false,
+};
+const SAVINGS_RATE = 0.1;
+const LOAN_RATE = 0.15;
 
 export default function Home() {
+  const [players, setPlayers] = useState([]);
+  const [name, setName] = useState("");
+  const [savingsRate, setSavingsRate] = useState(SAVINGS_RATE);
+  const [loanRate, setLoanRate] = useState(LOAN_RATE);
+  const [globalLapCounter, setGlobalLapCounter] = useState(1);
+
+  const changeSavingsRate = ({ target }) => setSavingsRate(target.value);
+  const changeLoanRate = ({ target }) => setLoanRate(target.value);
+
+  const invitePlayer = () => {
+    setPlayers([...players, { ...PLAYER, name }]);
+    setName("");
+  };
+
+  const onEnterInvitePlayer = ({ key }) => {
+    if (key === "Enter" && name) invitePlayer();
+  };
+
+  const onClickInvitePlayer = () => {
+    if (name) invitePlayer();
+  };
+
+  const setPlayer = (name) => (attrs) =>
+    setPlayers(
+      players.map((player) =>
+        player.name === name
+          ? {
+              ...player,
+              ...attrs,
+            }
+          : player
+      )
+    );
+
+  const removePlayer = (name) => () =>
+    setPlayers(players.filter((player) => player.name !== name));
+
+  const setGlobalLap = () => {
+    if (players.every((player) => !!player.globalLap)) {
+      setPlayers(players.map((player) => ({ ...player, globalLap: false })));
+      setGlobalLapCounter(globalLapCounter + 1);
+    }
+  };
+
+  const reset = () => {
+    setPlayers(players.map(({ name }) => ({ ...PLAYER, name })));
+    setSavingsRate(SAVINGS_RATE);
+    setLoanRate(LOAN_RATE);
+    setGlobalLapCounter(1);
+  };
+
   return (
-    <div className="container">
+    <>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Monopoly with options</title>
+        <link rel="icon" href="/favicon.ico"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        ></link>
       </Head>
-
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <aside>
+          <h1>Bank</h1>
+          <p>Global lap - {globalLapCounter}</p>
+          <div>
+            <label htmlFor="savingsRate">Savings Rate</label>
+            <input
+              type="text"
+              id="savingsRate"
+              value={savingsRate}
+              onChange={changeSavingsRate}
+            />
+          </div>
+          <div>
+            <label htmlFor="loanRate">Loan Rate</label>
+            <input
+              type="text"
+              id="loanRate"
+              value={loanRate}
+              onChange={changeLoanRate}
+            />
+          </div>
+          <button className="reset-btn" onClick={reset}>
+            Reset Game
+          </button>
+        </aside>
+        <section>
+          <h1>Players</h1>
+          <div className="input-wrapper">
+            <input
+              type="text"
+              value={name}
+              onChange={({ target }) => setName(target.value)}
+              onKeyDown={onEnterInvitePlayer}
+            />
+            <button onClick={onClickInvitePlayer}>Invite</button>
+          </div>
+          <hr />
+          <div className="grid">
+            {players.map((player) => (
+              <PlayerCard
+                key={player.name}
+                player={player}
+                setPlayer={setPlayer(player.name)}
+                removePlayer={removePlayer(player.name)}
+                savingsRate={+savingsRate}
+                loanRate={+loanRate}
+                setGlobalLap={setGlobalLap}
+              />
+            ))}
+          </div>
+        </section>
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+    </>
+  );
 }
