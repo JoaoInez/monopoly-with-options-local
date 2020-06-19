@@ -36,9 +36,7 @@ const PlayerCard = ({
   };
 
   const payLoan = () => {
-    // const _loan = loan - installment;
     setPlayer({ loan: loan - installment });
-    // if (installment > _loan) setPlayer({ installment: _loan });
   };
 
   const changeLoanToBeRequested = ({ target }) =>

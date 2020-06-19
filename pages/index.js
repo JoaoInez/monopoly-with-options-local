@@ -8,8 +8,8 @@ const PLAYER = {
   installment: 0,
   globalLap: false,
 };
-const SAVINGS_RATE = 0.1;
-const LOAN_RATE = 0.15;
+const SAVINGS_RATE = 0.15;
+const LOAN_RATE = 0.2; // TODO: rename to INTEREST_RATE
 
 export default function Home() {
   const [players, setPlayers] = useState([]);
